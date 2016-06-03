@@ -77,7 +77,11 @@ namespace HAL {
   
   JSValue::operator bool() const HAL_NOEXCEPT {
     HAL_JSVALUE_LOCK_GUARD;
-    return JSValueToBoolean(static_cast<JSContextRef>(js_context__), js_value_ref__);
+    const auto js_parse_ref__ = JSValueMakeFromJSONString(static_cast<JSContextRef>(js_context__), static_cast<JSStringRef>(operator JSString()));
+    if (!js_parse_ref__) {
+      return JSValueToBoolean(static_cast<JSContextRef>(js_context__), js_value_ref__);
+    }
+    return JSValueToBoolean(static_cast<JSContextRef>(js_context__), js_parse_ref__);
   }
   
   JSValue::operator double() const {
